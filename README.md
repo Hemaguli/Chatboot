@@ -1,58 +1,48 @@
-# Asistente de Impresoras y Copiadoras
+# Chatbot de Soporte Técnico 🖨️
 
-Un chatbot interactivo y amigable que ayuda con la operación de impresoras, copiadoras y escáneres.
+Un chatbot interactivo y amigable diseñado para brindar asistencia técnica sobre copiadoras, impresoras y escáneres.
 
 ## Características
 
-- 🤖 **Chatbot Inteligente**: Respuestas alternas y amigables
-- 📄 **Tamaños de Papel**: Media carta, carta, oficio
-- 🔄 **Modo Duplex**: Copiado, impresión y escaneado en ambas caras
-- 📷 **Escaneado Automático**: Con alimentador automático
-- ⚙️ **Ajustes Avanzados**: Densidad, modo económico, márgenes
-- 🌿 **Ahorro de Papel**: Distribución de 2 a 4 imágenes por hoja
-- 📧 **Envío por Correo**: Configuración de envío por email
-- 📁 **Carpeta Compartida**: Almacenamiento en red
-- 🎨 **Interfaz Moderna**: Diseño atractivo y responsive
+- **Interfaz moderna y atractiva** con diseño responsivo
+- **Conversaciones amigables** con respuestas alternadas
+- **Soporte completo** para:
+  - Copiadoras (inkjet y láser)
+  - Impresoras (inkjet y láser)
+  - Escáneres con alimentador automático
+- **Configuraciones avanzadas**:
+  - Tamaños de papel (media carta, carta, oficio)
+  - Copiado/impresión/escaneado duplex
+  - Envío a correo electrónico
+  - Almacenamiento en carpeta compartida
+  - Ajuste de densidad
+  - Modo económico
+  - Desplazamiento de márgenes
+  - Ahorro de papel (2, 3 o 4 imágenes por hoja)
+  - Formatos de archivo (PDF, JPEG, PNG, TIFF)
 
-## Uso
+## Cómo usar
 
-1. Abre `index.html` en tu navegador
-2. Escribe tu pregunta en el campo de texto
-3. O usa los botones de acción rápida
-4. El chatbot responderá de manera amigable con instrucciones detalladas
-
-## Estructura del Proyecto
-
-```
-Chatboot/
-├── index.html      # Estructura HTML
-├── styles.css      # Estilos CSS
-├── script.js       # Lógica del chatbot
-└── README.md       # Este archivo
-```
+1. Abre el archivo `index.html` en tu navegador web
+2. El chatbot te saludará y preguntará cómo va tu día
+3. Puedes escribir tus consultas o usar los botones de acción rápida
+4. El chatbot responderá de manera amigable y detallada
 
 ## Tecnologías
 
 - HTML5
-- CSS3 (con animaciones y gradientes)
-- JavaScript (Vanilla JS)
+- CSS3 (con animaciones y diseño moderno)
+- JavaScript (Vanilla)
 
-## Funcionalidades del Chatbot
+## Estructura de archivos
 
-El chatbot puede ayudar con:
+```
+Chatboot/
+│
+├── index.html      # Estructura HTML del chatbot
+├── styles.css      # Estilos y diseño visual
+├── script.js       # Lógica del chatbot y respuestas
+└── README.md       # Este archivo
+```
 
-- Configuración de tamaños de papel
-- Impresión y copiado duplex
-- Escaneado con alimentador automático
-- Ajustes de densidad de impresión
-- Modo económico
-- Desplazamiento de márgenes
-- Ahorro de papel (2 en 1, 4 en 1)
-- Envío por correo electrónico
-- Almacenamiento en carpetas compartidas
-
-## Notas
-
-- El chatbot responde de manera alterna para mantener conversaciones dinámicas
-- Las respuestas incluyen instrucciones paso a paso
-- La interfaz es totalmente responsive
+¡Disfruta usando el chatbot de Soporte Técnico! 😊

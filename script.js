@@ -1,433 +1,435 @@
-// Base de conocimiento del chatbot
-const knowledgeBase = {
-  // Tamaños de papel
-  "tamaño papel": {
-    responses: [
-      {
-        text: "Para configurar el tamaño de papel, sigue estos pasos:",
-        content: `
-                    <div class="config-section">
-                        <h3>📄 Tamaños de Papel Disponibles:</h3>
-                        <p><strong>Media Carta:</strong> 8.5" × 5.5" (140 × 216 mm)</p>
-                        <p><strong>Carta:</strong> 8.5" × 11" (216 × 279 mm)</p>
-                        <p><strong>Oficio:</strong> 8.5" × 13" (216 × 330 mm)</p>
-                        <p><strong>Legal:</strong> 8.5" × 14" (216 × 356 mm)</p>
-                    </div>
-                    <div class="config-section">
-                        <h3>⚙️ Cómo configurar:</h3>
-                        <ol>
-                            <li>Ve al menú <span class="highlight">Configuración</span> en el panel de control</li>
-                            <li>Selecciona <span class="highlight">Tamaño de Papel</span></li>
-                            <li>Elige el tamaño deseado de la lista</li>
-                            <li>Asegúrate de que la bandeja tenga el papel del tamaño correcto</li>
-                            <li>Confirma los cambios</li>
-                        </ol>
-                    </div>
-                `,
-      },
-      {
-        text: "¡Por supuesto! Los tamaños de papel más comunes son:",
-        content: `
-                    <div class="config-section">
-                        <h3>📏 Opciones de Tamaño:</h3>
-                        <p><strong>Media Carta (Half Letter):</strong> Ideal para documentos pequeños, notas y comprobantes</p>
-                        <p><strong>Carta (Letter):</strong> Estándar para documentos de oficina y correspondencia</p>
-                        <p><strong>Oficio (Legal/Letter Plus):</strong> Perfecto para contratos y documentos largos</p>
-                    </div>
-                    <div class="tip">
-                        💡 <strong>Consejo:</strong> Siempre verifica que el tamaño configurado coincida con el papel en la bandeja para evitar atascos.
-                    </div>
-                `,
-      },
+// Estado del chatbot
+let userGreeted = false;
+let conversationCount = 0;
+
+// Referencias DOM
+const chatMessages = document.getElementById("chatMessages");
+const userInput = document.getElementById("userInput");
+const sendButton = document.getElementById("sendButton");
+const quickActions = document.getElementById("quickActions");
+
+// Respuestas del chatbot
+const responses = {
+  greeting: [
+    "¡Hola! 😊 Me alegra saber que tu día va bien. Estoy aquí para ayudarte con cualquier consulta sobre copiadoras, impresoras o escáneres.",
+    "¡Genial! 😄 Me encanta escuchar eso. Estoy listo para asistirte con todo lo que necesites sobre equipos de oficina.",
+    "¡Excelente! 🌟 Me da mucho gusto. Cuenta conmigo para resolver todas tus dudas sobre impresión, copia y escaneo.",
+  ],
+  copiadora: {
+    general:
+      "¡Por supuesto! Te puedo ayudar con tu copiadora. ¿Qué tipo de copiadora tienes: inkjet o láser?",
+    inkjet:
+      "Perfecto, una copiadora inkjet. Estas son excelentes para documentos con imágenes y fotografías. ¿En qué específicamente necesitas ayuda?",
+    laser:
+      "Excelente, una copiadora láser. Estas son ideales para documentos de texto con gran volumen. ¿Cuál es tu consulta?",
+    configuracion:
+      "Para configurar tu copiadora, te recomiendo revisar las siguientes opciones: tamaño de papel, calidad de impresión, modo económico y ajustes de densidad.",
+  },
+  impresora: {
+    general:
+      "¡Claro que sí! 😊 ¿Tienes una impresora inkjet o láser? Ambas tienen sus ventajas.",
+    inkjet:
+      "Las impresoras inkjet son perfectas para impresiones de alta calidad en color. ¿Qué necesitas saber?",
+    laser:
+      "Las impresoras láser son excelentes para impresión rápida y económica en blanco y negro o color. ¿En qué puedo ayudarte?",
+    configuracion:
+      "Para configurar tu impresora, podemos ajustar: tamaño de papel, calidad, modo económico, márgenes y opciones de ahorro de papel.",
+  },
+  escaner: {
+    general:
+      "¡Perfecto! Los escáneres con alimentador automático son muy prácticos. Te puedo ayudar con su configuración y uso.",
+    uso: "Para usar tu escáner con alimentador automático: 1) Coloca los documentos en el alimentador, 2) Configura el tamaño y formato, 3) Selecciona destino (correo o carpeta), 4) Inicia el escaneo.",
+  },
+  tamanos_papel: {
+    general:
+      "¡Por supuesto! Te ayudo con los tamaños de papel. Las opciones disponibles son:",
+    opciones: [
+      "📄 Media Carta (A5) - Ideal para documentos pequeños",
+      "📄 Carta (A4) - El tamaño estándar más común",
+      "📄 Oficio (Legal) - Perfecto para documentos largos",
     ],
   },
-
-  // Duplex
   duplex: {
-    responses: [
-      {
-        text: "El modo duplex te permite imprimir o copiar en ambas caras del papel automáticamente:",
-        content: `
-                    <div class="config-section">
-                        <h3>🔄 Copiado/Impresión Duplex:</h3>
-                        <ol>
-                            <li>En el menú principal, selecciona <span class="highlight">Imprimir</span> o <span class="highlight">Copiar</span></li>
-                            <li>Busca la opción <span class="highlight">Imprimir en ambas caras</span> o <span class="highlight">Duplex</span></li>
-                            <li>Elige <span class="highlight">Duplex automático</span> si tu equipo lo soporta</li>
-                            <li>Para copiado duplex, coloca los documentos en el alimentador automático</li>
-                            <li>Ajusta la orientación si es necesario (vertical u horizontal)</li>
-                        </ol>
-                    </div>
-                    <div class="warning">
-                        ⚠️ <strong>Nota:</strong> Asegúrate de que tu impresora/copiadora tenga la función duplex habilitada. Algunos modelos requieren módulos adicionales.
-                    </div>
-                `,
-      },
-      {
-        text: "¡Excelente opción para ahorrar papel! Aquí te explico el proceso duplex:",
-        content: `
-                    <div class="config-section">
-                        <h3>📋 Pasos para Duplex:</h3>
-                        <p><strong>Para Impresión Duplex:</strong></p>
-                        <ul>
-                            <li>Abra el documento que desea imprimir</li>
-                            <li>Seleccione <span class="highlight">Archivo → Imprimir</span></li>
-                            <li>En propiedades de impresora, active <span class="highlight">Imprimir en ambas caras</span></li>
-                            <li>Configure el orden de las páginas (corto o largo)</li>
-                        </ul>
-                        <p><strong>Para Escaneado Duplex:</strong></p>
-                        <ul>
-                            <li>Coloque los documentos en el alimentador automático</li>
-                            <li>Seleccione <span class="highlight">Escaneado Duplex</span> en el menú</li>
-                            <li>El escáner capturará ambas caras automáticamente</li>
-                        </ul>
-                    </div>
-                    <div class="tip">
-                        🌱 <strong>Ahorro:</strong> El duplex puede reducir el uso de papel hasta en un 50%.
-                    </div>
-                `,
-      },
-    ],
+    copiado:
+      "El copiado duplex permite imprimir en ambas caras automáticamente. Para activarlo: 1) Selecciona 'Copiar' en el menú, 2) Busca la opción 'Dos caras' o 'Duplex', 3) Actívala antes de iniciar. ¡Ahorra papel y dinero! 🌱",
+    impresion:
+      "La impresión duplex es muy útil. En tu equipo: 1) Abre el cuadro de diálogo de impresión, 2) Busca 'Propiedades de impresora', 3) Selecciona 'Imprimir en ambas caras', 4) Configura si deseas voltear en el lado largo o corto.",
+    escaneado:
+      "El escaneado duplex escanea ambas caras automáticamente. Pasos: 1) Coloca documentos en el alimentador, 2) Selecciona 'Escaneo duplex' en el menú, 3) El equipo escaneará ambas caras automáticamente. ¡Muy eficiente! ✨",
   },
-
-  // Escaneado
-  escanear: {
-    responses: [
-      {
-        text: "Te ayudo con el escaneado usando el alimentador automático:",
-        content: `
-                    <div class="config-section">
-                        <h3>📷 Escaneado con Alimentador Automático:</h3>
-                        <ol>
-                            <li><strong>Preparación:</strong> Asegúrate de que los documentos estén libres de clips, grapas o adhesivos</li>
-                            <li><strong>Colocación:</strong> Coloca los documentos boca arriba en el alimentador automático</li>
-                            <li><strong>Límites:</strong> No excedas la capacidad máxima (generalmente 50-100 hojas)</li>
-                            <li><strong>Configuración:</strong> En el panel de control, selecciona:
-                                <ul>
-                                    <li>Tipo de documento (color o blanco y negro)</li>
-                                    <li>Resolución (300 DPI recomendado para documentos, 600 DPI para imágenes)</li>
-                                    <li>Formato de salida (PDF, JPEG, TIFF)</li>
-                                    <li>Escaneado duplex si es necesario</li>
-                                </ul>
-                            </li>
-                            <li><strong>Destino:</strong> Elige dónde guardar:
-                                <ul>
-                                    <li>Correo electrónico</li>
-                                    <li>Carpeta compartida en red</li>
-                                    <li>USB o memoria externa</li>
-                                    <li>Dispositivo móvil</li>
-                                </ul>
-                            </li>
-                            <li><strong>Inicio:</strong> Presiona el botón <span class="highlight">Iniciar</span> o <span class="highlight">Escanear</span></li>
-                        </ol>
-                    </div>
-                `,
-      },
-      {
-        text: "El alimentador automático facilita mucho el proceso. Aquí tienes una guía completa:",
-        content: `
-                    <div class="config-section">
-                        <h3>🎯 Configuración de Escaneado:</h3>
-                        <p><strong>Opciones de Resolución:</strong></p>
-                        <ul>
-                            <li><span class="highlight">200 DPI:</span> Para documentos de texto simples</li>
-                            <li><span class="highlight">300 DPI:</span> Estándar para la mayoría de documentos</li>
-                            <li><span class="highlight">600 DPI:</span> Para imágenes y documentos detallados</li>
-                        </ul>
-                        <p><strong>Formatos Disponibles:</strong></p>
-                        <ul>
-                            <li><span class="highlight">PDF:</span> Para documentos múltiples páginas</li>
-                            <li><span class="highlight">JPEG:</span> Para imágenes individuales</li>
-                            <li><span class="highlight">TIFF:</span> Para máxima calidad</li>
-                        </ul>
-                    </div>
-                    <div class="config-section">
-                        <h3>📧 Envío por Correo:</h3>
-                        <ol>
-                            <li>Selecciona <span class="highlight">Enviar por correo</span></li>
-                            <li>Ingresa la dirección de correo del destinatario</li>
-                            <li>Puedes agregar un asunto y mensaje opcional</li>
-                            <li>Configura el formato del archivo adjunto</li>
-                            <li>Presiona <span class="highlight">Enviar</span></li>
-                        </ol>
-                    </div>
-                    <div class="config-section">
-                        <h3>📁 Carpeta Compartida:</h3>
-                        <ol>
-                            <li>Selecciona <span class="highlight">Guardar en red</span> o <span class="highlight">Carpeta compartida</span></li>
-                            <li>Ingresa la ruta de red (ejemplo: \\\\servidor\\carpeta)</li>
-                            <li>Proporciona credenciales si es necesario</li>
-                            <li>El archivo se guardará automáticamente</li>
-                        </ol>
-                    </div>
-                `,
-      },
-    ],
+  correo:
+    "Para enviar escaneados a correo electrónico: 1) Selecciona 'Enviar a correo' en el menú, 2) Ingresa la dirección de destino, 3) Configura el formato (PDF o imagen), 4) Presiona 'Enviar'. ¡Listo! 📧",
+  carpeta_compartida:
+    "Para guardar en carpeta compartida: 1) Accede a la configuración de red del equipo, 2) Configura la ruta de la carpeta compartida, 3) Selecciona 'Enviar a carpeta' en el menú, 4) Elige la carpeta y confirma. Los archivos se guardarán automáticamente. 💾",
+  densidad:
+    "El ajuste de densidad controla qué tan oscura será la impresión. Para ajustarla: 1) Ve a 'Ajustes' o 'Propiedades', 2) Busca 'Densidad' o 'Calidad', 3) Mueve el control (más bajo = más claro, más alto = más oscuro), 4) Aplica y prueba. Ajusta según tus necesidades. 🎚️",
+  modo_economico:
+    "El modo económico reduce el consumo de tóner/tinta. Para activarlo: 1) Busca 'Modo económico' o 'Eco' en el menú, 2) Actívalo (algunos equipos lo llaman 'Borrador'), 3) La calidad será ligeramente menor pero ahorrarás mucho. Perfecto para documentos internos. 💰",
+  margenes:
+    "Para ajustar márgenes: 1) Ve a 'Configuración' > 'Ajustes de página', 2) Selecciona 'Márgenes' o 'Desplazamiento', 3) Ajusta superior, inferior, izquierdo y derecho según necesites, 4) Guarda la configuración. Esto te permite optimizar el espacio. 📏",
+  ahorro_papel: {
+    general:
+      "¡Excelente opción para ahorrar papel! Te puedo ayudar con la distribución de imágenes en una sola hoja.",
+    dos_imagenes:
+      "Para 2 imágenes por hoja: 1) Selecciona 'Layout' o 'Diseño', 2) Elige '2 en 1' o '2 páginas por hoja', 3) El equipo distribuirá dos páginas en una sola. ¡Ahorra 50% de papel! 🌱",
+    tres_imagenes:
+      "Para 3 imágenes por hoja: 1) Ve a 'Configuración de página', 2) Selecciona '3 en 1', 3) Ajusta el orden si es necesario. Eficiente para documentos pequeños. 📄",
+    cuatro_imagenes:
+      "Para 4 imágenes por hoja: 1) Selecciona '4 en 1' en el menú de diseño, 2) El equipo organizará 4 páginas en una sola hoja, 3) Ideal para borradores. ¡Ahorra 75% de papel! 🌍",
   },
-
-  // Ajustes y configuración
-  ajustes: {
-    responses: [
-      {
-        text: "Aquí tienes los ajustes más importantes que puedes configurar:",
-        content: `
-                    <div class="config-section">
-                        <h3>⚙️ Ajustes de Densidad:</h3>
-                        <p>La densidad controla qué tan oscuro o claro se imprime:</p>
-                        <ul>
-                            <li><span class="highlight">Ligero (-3 a -1):</span> Para documentos con mucho texto o ahorro de tóner/tinta</li>
-                            <li><span class="highlight">Normal (0):</span> Configuración estándar para uso diario</li>
-                            <li><span class="highlight">Oscuro (+1 a +3):</span> Para mayor contraste y nitidez</li>
-                        </ul>
-                        <p><strong>Cómo ajustar:</strong> Menú → Calidad → Densidad</p>
-                    </div>
-                    <div class="config-section">
-                        <h3>💚 Modo Económico:</h3>
-                        <p>Reduce el consumo de tóner/tinta:</p>
-                        <ul>
-                            <li>Activa el <span class="highlight">Modo Económico</span> o <span class="highlight">Modo Borrador</span></li>
-                            <li>Reduce la resolución de impresión</li>
-                            <li>Usa menos tóner/tinta por página</li>
-                            <li>Ideal para documentos internos o borradores</li>
-                        </ul>
-                    </div>
-                    <div class="config-section">
-                        <h3>📐 Desplazamiento de Márgenes:</h3>
-                        <p>Permite ajustar la posición del contenido en la página:</p>
-                        <ol>
-                            <li>Ve a <span class="highlight">Ajustes → Márgenes</span></li>
-                            <li>Ajusta horizontal y verticalmente según necesites</li>
-                            <li>Los valores típicos van de -20mm a +20mm</li>
-                        </ol>
-                    </div>
-                    <div class="config-section">
-                        <h3>🌿 Ahorro de Papel - Distribución Múltiple:</h3>
-                        <p>Imprime múltiples páginas en una sola hoja:</p>
-                        <ul>
-                            <li><span class="highlight">2 en 1:</span> Dos páginas por hoja (vertical u horizontal)</li>
-                            <li><span class="highlight">4 en 1:</span> Cuatro páginas por hoja</li>
-                            <li><span class="highlight">Imagen por esquina:</span> Distribución automática</li>
-                        </ul>
-                        <p><strong>Cómo configurar:</strong> Menú → Ahorro de Papel → N páginas por hoja</p>
-                    </div>
-                `,
-      },
-      {
-        text: "¡Perfecto! Te explico los ajustes disponibles en detalle:",
-        content: `
-                    <div class="config-section">
-                        <h3>🎛️ Panel de Control - Ajustes Rápidos:</h3>
-                        <p><strong>1. Densidad de Impresión:</strong></p>
-                        <p>Ajusta en el menú de <span class="highlight">Calidad</span>. Para documentos con mucho texto, usa densidad ligera. Para presentaciones importantes, usa densidad oscura.</p>
-                        
-                        <p><strong>2. Modo Económico:</strong></p>
-                        <p>Perfecto para ahorrar recursos. Se puede activar permanentemente o por trabajo. Busca el ícono de <span class="highlight">💡</span> o <span class="highlight">💰</span> en el panel.</p>
-                        
-                        <p><strong>3. Márgenes:</strong></p>
-                        <p>Útil cuando necesitas ajustar el contenido. Algunos modelos permiten previsualización antes de imprimir.</p>
-                    </div>
-                    <div class="config-section">
-                        <h3>📊 Configuración de Ahorro de Papel:</h3>
-                        <p><strong>Opción 2 en 1:</strong></p>
-                        <ul>
-                            <li>Selecciona <span class="highlight">Imprimir → Propiedades → Diseño</span></li>
-                            <li>Elige <span class="highlight">2 páginas por hoja</span></li>
-                            <li>Orientación automática o manual</li>
-                        </ul>
-                        <p><strong>Opción 4 en 1:</strong></p>
-                        <ul>
-                            <li>Similar proceso, selecciona <span class="highlight">4 páginas por hoja</span></li>
-                            <li>Útil para presentaciones o resúmenes</li>
-                        </ul>
-                    </div>
-                    <div class="tip">
-                        💡 <strong>Pro Tip:</strong> Combina modo económico + distribución múltiple para máximo ahorro de recursos.
-                    </div>
-                `,
-      },
-    ],
+  formato: {
+    general:
+      "Los formatos disponibles son: PDF (recomendado), JPEG, PNG y TIFF. ¿Qué formato prefieres?",
+    pdf: "PDF es el formato más común. Es universal y mantiene la calidad. Perfecto para documentos que se compartirán.",
+    jpeg: "JPEG es ideal para imágenes. Tiene buena compresión pero puede perder calidad con texto pequeño.",
+    png: "PNG mantiene calidad sin pérdidas. Excelente para imágenes con texto, pero archivos más grandes.",
+    tiff: "TIFF es de alta calidad, ideal para archivos profesionales y archivado a largo plazo.",
   },
-
-  // Respuestas generales
-  default: {
-    responses: [
-      {
-        text: "Entiendo tu consulta. Déjame ayudarte con eso:",
-        content: `<p>Puedes preguntarme sobre:</p>
-                    <ul>
-                        <li>📄 Configuración de tamaños de papel (media carta, carta, oficio)</li>
-                        <li>🔄 Impresión y copiado duplex</li>
-                        <li>📷 Escaneado con alimentador automático</li>
-                        <li>⚙️ Ajustes de densidad y calidad</li>
-                        <li>💚 Modo económico</li>
-                        <li>📐 Desplazamiento de márgenes</li>
-                        <li>🌿 Ahorro de papel (2 en 1, 4 en 1)</li>
-                        <li>📧 Envío por correo electrónico</li>
-                        <li>📁 Almacenamiento en carpeta compartida</li>
-                    </ul>
-                    <p>¿Sobre qué tema específico necesitas ayuda?</p>`,
-      },
-      {
-        text: "¡Por supuesto! Estoy aquí para ayudarte.",
-        content: `<p>Puedo asistirte con diversas funciones de tu equipo:</p>
-                    <div class="config-section">
-                        <h3>🔧 Áreas en las que puedo ayudar:</h3>
-                        <ul>
-                            <li><strong>Tamaños de papel:</strong> Media carta, carta, oficio</li>
-                            <li><strong>Duplex:</strong> Copiado, impresión y escaneado en ambas caras</li>
-                            <li><strong>Escaneado:</strong> Con alimentador automático y opciones de destino</li>
-                            <li><strong>Ajustes:</strong> Densidad, modo económico, márgenes</li>
-                            <li><strong>Ahorro:</strong> Distribución de 2 a 4 imágenes por hoja</li>
-                        </ul>
-                    </div>
-                    <p>¿Qué necesitas hacer específicamente?</p>`,
-      },
-    ],
-  },
+  default: [
+    "¡Por supuesto! Estoy aquí para ayudarte. ¿Podrías ser más específico sobre lo que necesitas? 😊",
+    "Entiendo. ¿Te refieres a configuración de copiadora, impresora o escáner? Puedo ayudarte con cualquiera. ✨",
+    "No hay problema. Cuéntame más detalles y te guiaré paso a paso. 😄",
+  ],
 };
 
-// Contador para respuestas alternas
-let responseCounters = {};
+// Función para obtener respuesta amigable alternada
+function getAlternateResponse(category, subcategory = null) {
+  const responsesArray = subcategory
+    ? responses[category]?.[subcategory] ||
+      responses[category]?.[subcategory] ||
+      responses.default
+    : Array.isArray(responses[category])
+    ? responses[category]
+    : [responses[category]];
 
-// Función para detectar la intención del usuario
-function detectIntent(message) {
-  const lowerMessage = message.toLowerCase();
-
-  // Palabras clave para cada categoría
-  const keywords = {
-    "tamaño papel": [
-      "tamaño",
-      "papel",
-      "carta",
-      "oficio",
-      "media carta",
-      "formato",
-      "dimensiones",
-    ],
-    duplex: ["duplex", "ambas caras", "dos lados", "doble cara", "dos caras"],
-    escanear: [
-      "escanear",
-      "escanear",
-      "escáner",
-      "alimentador",
-      "automatico",
-      "escanado",
-    ],
-    ajustes: [
-      "ajustes",
-      "ajuste",
-      "configuración",
-      "configurar",
-      "densidad",
-      "económico",
-      "margen",
-      "ahorro",
-      "distribución",
-      "2 en 1",
-      "4 en 1",
-    ],
-  };
-
-  // Buscar coincidencias
-  for (const [category, words] of Object.entries(keywords)) {
-    if (words.some((word) => lowerMessage.includes(word))) {
-      return category;
-    }
+  if (Array.isArray(responsesArray)) {
+    return responsesArray[conversationCount % responsesArray.length];
   }
-
-  return "default";
+  return (
+    responsesArray ||
+    responses.default[conversationCount % responses.default.length]
+  );
 }
 
-// Función para obtener respuesta alterna
-function getAlternateResponse(category) {
-  if (!responseCounters[category]) {
-    responseCounters[category] = 0;
+// Función para agregar mensaje al chat
+function addMessage(text, isUser = false) {
+  const messageDiv = document.createElement("div");
+  messageDiv.className = `message ${isUser ? "user-message" : "bot-message"}`;
+
+  const contentDiv = document.createElement("div");
+  contentDiv.className = "message-content";
+
+  if (typeof text === "string") {
+    contentDiv.innerHTML = `<p>${text}</p>`;
+  } else if (Array.isArray(text)) {
+    contentDiv.innerHTML = text.map((item) => `<p>${item}</p>`).join("");
   }
 
-  const categoryData = knowledgeBase[category] || knowledgeBase["default"];
-  const responses = categoryData.responses;
-  const index = responseCounters[category] % responses.length;
-  responseCounters[category]++;
+  const timeDiv = document.createElement("div");
+  timeDiv.className = "message-time";
+  const now = new Date();
+  timeDiv.textContent = `${now.getHours().toString().padStart(2, "0")}:${now
+    .getMinutes()
+    .toString()
+    .padStart(2, "0")}`;
 
-  return responses[index];
+  messageDiv.appendChild(contentDiv);
+  messageDiv.appendChild(timeDiv);
+
+  chatMessages.appendChild(messageDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Función para mostrar indicador de escritura
+function showTypingIndicator() {
+  const typingDiv = document.createElement("div");
+  typingDiv.className = "message bot-message";
+  typingDiv.id = "typingIndicator";
+
+  const contentDiv = document.createElement("div");
+  contentDiv.className = "message-content typing-indicator";
+  contentDiv.innerHTML = `
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+    `;
+
+  typingDiv.appendChild(contentDiv);
+  chatMessages.appendChild(typingDiv);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Función para ocultar indicador de escritura
+function hideTypingIndicator() {
+  const indicator = document.getElementById("typingIndicator");
+  if (indicator) {
+    indicator.remove();
+  }
+}
+
+// Función para procesar mensaje del usuario
+function processUserMessage(message) {
+  const lowerMessage = message.toLowerCase();
+
+  // Detectar saludo inicial
+  if (
+    !userGreeted &&
+    (lowerMessage.includes("bien") ||
+      lowerMessage.includes("bien gracias") ||
+      lowerMessage.includes("excelente") ||
+      lowerMessage.includes("genial") ||
+      lowerMessage.includes("muy bien") ||
+      lowerMessage.includes("todo bien"))
+  ) {
+    userGreeted = true;
+    return getAlternateResponse("greeting");
+  }
+
+  // Detectar tipo de equipo
+  if (lowerMessage.includes("copiadora")) {
+    if (lowerMessage.includes("inkjet")) {
+      return getAlternateResponse("copiadora", "inkjet");
+    } else if (
+      lowerMessage.includes("laser") ||
+      lowerMessage.includes("láser")
+    ) {
+      return getAlternateResponse("copiadora", "laser");
+    }
+    return getAlternateResponse("copiadora", "general");
+  }
+
+  if (lowerMessage.includes("impresora")) {
+    if (lowerMessage.includes("inkjet")) {
+      return getAlternateResponse("impresora", "inkjet");
+    } else if (
+      lowerMessage.includes("laser") ||
+      lowerMessage.includes("láser")
+    ) {
+      return getAlternateResponse("impresora", "laser");
+    }
+    return getAlternateResponse("impresora", "general");
+  }
+
+  if (
+    lowerMessage.includes("escaner") ||
+    lowerMessage.includes("escáner") ||
+    lowerMessage.includes("escanear")
+  ) {
+    if (
+      lowerMessage.includes("usar") ||
+      lowerMessage.includes("operar") ||
+      lowerMessage.includes("como")
+    ) {
+      return getAlternateResponse("escaner", "uso");
+    }
+    return getAlternateResponse("escaner", "general");
+  }
+
+  // Tamaños de papel
+  if (
+    lowerMessage.includes("tamaño") ||
+    lowerMessage.includes("papel") ||
+    lowerMessage.includes("media carta") ||
+    lowerMessage.includes("carta") ||
+    lowerMessage.includes("oficio")
+  ) {
+    const response = getAlternateResponse("tamanos_papel", "general");
+    const options = responses.tamanos_papel.opciones;
+    return response + "\n\n" + options.join("\n");
+  }
+
+  // Duplex
+  if (
+    lowerMessage.includes("duplex") ||
+    lowerMessage.includes("doble cara") ||
+    lowerMessage.includes("ambas caras")
+  ) {
+    if (lowerMessage.includes("copi") || lowerMessage.includes("copiar")) {
+      return getAlternateResponse("duplex", "copiado");
+    } else if (
+      lowerMessage.includes("imprimir") ||
+      lowerMessage.includes("impresión")
+    ) {
+      return getAlternateResponse("duplex", "impresion");
+    } else if (
+      lowerMessage.includes("escan") ||
+      lowerMessage.includes("escáner")
+    ) {
+      return getAlternateResponse("duplex", "escaneado");
+    }
+    return getAlternateResponse("duplex", "copiado");
+  }
+
+  // Correo electrónico
+  if (
+    lowerMessage.includes("correo") ||
+    lowerMessage.includes("email") ||
+    lowerMessage.includes("mail")
+  ) {
+    return responses.correo;
+  }
+
+  // Carpeta compartida
+  if (
+    lowerMessage.includes("carpeta") ||
+    lowerMessage.includes("almacenar") ||
+    lowerMessage.includes("guardar") ||
+    lowerMessage.includes("compartida")
+  ) {
+    return responses.carpeta_compartida;
+  }
+
+  // Densidad
+  if (
+    lowerMessage.includes("densidad") ||
+    lowerMessage.includes("oscuro") ||
+    lowerMessage.includes("claro")
+  ) {
+    return responses.densidad;
+  }
+
+  // Modo económico
+  if (
+    lowerMessage.includes("económico") ||
+    lowerMessage.includes("economico") ||
+    lowerMessage.includes("eco") ||
+    lowerMessage.includes("ahorro")
+  ) {
+    if (lowerMessage.includes("papel")) {
+      return getAlternateResponse("ahorro_papel", "general");
+    }
+    return responses.modo_economico;
+  }
+
+  // Márgenes
+  if (
+    lowerMessage.includes("margen") ||
+    lowerMessage.includes("desplazamiento")
+  ) {
+    return responses.margenes;
+  }
+
+  // Ahorro de papel - distribución
+  if (
+    lowerMessage.includes("2 imagen") ||
+    lowerMessage.includes("dos imagen") ||
+    lowerMessage.includes("2 por hoja") ||
+    lowerMessage.includes("dos por hoja")
+  ) {
+    return getAlternateResponse("ahorro_papel", "dos_imagenes");
+  }
+
+  if (
+    lowerMessage.includes("3 imagen") ||
+    lowerMessage.includes("tres imagen") ||
+    lowerMessage.includes("3 por hoja") ||
+    lowerMessage.includes("tres por hoja")
+  ) {
+    return getAlternateResponse("ahorro_papel", "tres_imagenes");
+  }
+
+  if (
+    lowerMessage.includes("4 imagen") ||
+    lowerMessage.includes("cuatro imagen") ||
+    lowerMessage.includes("4 por hoja") ||
+    lowerMessage.includes("cuatro por hoja")
+  ) {
+    return getAlternateResponse("ahorro_papel", "cuatro_imagenes");
+  }
+
+  // Formato
+  if (lowerMessage.includes("formato")) {
+    return responses.formato.general;
+  }
+
+  if (lowerMessage.includes("pdf")) {
+    return responses.formato.pdf;
+  }
+
+  if (lowerMessage.includes("jpeg") || lowerMessage.includes("jpg")) {
+    return responses.formato.jpeg;
+  }
+
+  if (lowerMessage.includes("png")) {
+    return responses.formato.png;
+  }
+
+  if (lowerMessage.includes("tiff") || lowerMessage.includes("tif")) {
+    return responses.formato.tiff;
+  }
+
+  // Configuración general
+  if (
+    lowerMessage.includes("configuración") ||
+    lowerMessage.includes("configuracion") ||
+    lowerMessage.includes("configurar") ||
+    lowerMessage.includes("ajust")
+  ) {
+    return getAlternateResponse("default");
+  }
+
+  // Respuesta por defecto
+  return getAlternateResponse("default");
 }
 
 // Función para enviar mensaje
 function sendMessage() {
-  const input = document.getElementById("userInput");
-  const message = input.value.trim();
-
+  const message = userInput.value.trim();
   if (!message) return;
 
-  // Agregar mensaje del usuario
-  addMessage(message, "user");
+  addMessage(message, true);
+  userInput.value = "";
 
-  // Limpiar input
-  input.value = "";
+  showTypingIndicator();
 
-  // Simular delay de respuesta
   setTimeout(() => {
-    const intent = detectIntent(message);
-    const response = getAlternateResponse(intent);
-
-    addMessage(response.text, "bot", response.content);
-
-    // Scroll automático
-    scrollToBottom();
-  }, 500);
-}
-
-// Función para agregar mensaje al chat
-function addMessage(text, sender, htmlContent = "") {
-  const chatContainer = document.getElementById("chatContainer");
-  const messageDiv = document.createElement("div");
-  messageDiv.className = `message ${sender}-message`;
-
-  const avatar = sender === "user" ? "👤" : "🤖";
-
-  messageDiv.innerHTML = `
-        <div class="message-avatar">${avatar}</div>
-        <div class="message-content">
-            <p>${text}</p>
-            ${htmlContent}
-        </div>
-    `;
-
-  chatContainer.appendChild(messageDiv);
-  scrollToBottom();
-}
-
-// Función para scroll automático
-function scrollToBottom() {
-  const chatContainer = document.getElementById("chatContainer");
-  chatContainer.scrollTop = chatContainer.scrollHeight;
+    hideTypingIndicator();
+    const response = processUserMessage(message);
+    addMessage(response);
+    conversationCount++;
+  }, 1000 + Math.random() * 1000);
 }
 
 // Event listeners
-document.addEventListener("DOMContentLoaded", () => {
-  const sendButton = document.getElementById("sendButton");
-  const userInput = document.getElementById("userInput");
-  const quickButtons = document.querySelectorAll(".quick-btn");
+sendButton.addEventListener("click", sendMessage);
 
-  // Enviar con botón
-  sendButton.addEventListener("click", sendMessage);
+userInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    sendMessage();
+  }
+});
 
-  // Enviar con Enter
-  userInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
+// Botones de acción rápida
+quickActions.addEventListener("click", (e) => {
+  if (e.target.classList.contains("quick-btn")) {
+    const action = e.target.dataset.action;
+    let message = "";
+
+    switch (action) {
+      case "copiadora":
+        message = "Necesito ayuda con la copiadora";
+        break;
+      case "impresora":
+        message = "Necesito ayuda con la impresora";
+        break;
+      case "escaner":
+        message = "Necesito ayuda con el escáner";
+        break;
+      case "configuracion":
+        message = "Necesito ayuda con la configuración";
+        break;
+    }
+
+    if (message) {
+      userInput.value = message;
       sendMessage();
     }
-  });
-
-  // Botones de acción rápida
-  quickButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const action = button.getAttribute("data-action");
-      userInput.value = action;
-      sendMessage();
-    });
-  });
-
-  // Scroll inicial
-  scrollToBottom();
+  }
 });
+
+// Saludo inicial si el usuario no ha respondido
+setTimeout(() => {
+  if (!userGreeted) {
+    // Ya está el saludo inicial en el HTML
+  }
+}, 500);
