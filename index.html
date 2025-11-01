@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Asistente de Impresoras y Copiadoras</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="chat-header">
+        <div class="header-icon">🖨️</div>
+        <h1>Asistente de Impresoras y Copiadoras</h1>
+        <p>Hola, soy tu asistente virtual. ¿En qué puedo ayudarte hoy?</p>
+      </div>
+
+      <div class="chat-container" id="chatContainer">
+        <div class="message bot-message">
+          <div class="message-avatar">🤖</div>
+          <div class="message-content">
+            <p>
+              ¡Hola! 👋 Soy tu asistente para impresoras, copiadoras y
+              escáneres. Puedo ayudarte con:
+            </p>
+            <ul>
+              <li>Configuración de tamaños de papel</li>
+              <li>Impresión y copia duplex</li>
+              <li>Escaneado con alimentador automático</li>
+              <li>Ajustes de calidad y densidad</li>
+              <li>Opciones de ahorro de papel</li>
+              <li>Envío por correo electrónico</li>
+              <li>Y mucho más...</li>
+            </ul>
+            <p>¿Qué necesitas hacer hoy?</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <button class="quick-btn" data-action="tamaño papel">
+          Tamaños de Papel
+        </button>
+        <button class="quick-btn" data-action="duplex">
+          Copiado/Impresión Duplex
+        </button>
+        <button class="quick-btn" data-action="escanear">Escaneado</button>
+        <button class="quick-btn" data-action="ajustes">
+          Ajustes y Configuración
+        </button>
+      </div>
+
+      <div class="input-container">
+        <input
+          type="text"
+          id="userInput"
+          placeholder="Escribe tu pregunta aquí..."
+          autocomplete="off"
+        />
+        <button id="sendButton">
+          <span>Enviar</span>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
